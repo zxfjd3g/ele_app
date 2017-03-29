@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import vueResource from 'vue-resource'
 
 import App from './App'
 import goods from './components/goods/goods'
@@ -10,6 +11,7 @@ import './common/stylus/index.styl'
 
 // 声明使用vue的扩展插件
 Vue.use(VueRouter)
+Vue.use(vueResource)  //所有的组件对象都多了一个属性: $http
 
 // 创建router对象
 let router = new VueRouter({

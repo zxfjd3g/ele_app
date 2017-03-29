@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--头部组件标签-->
-    <ele-header></ele-header>
+    <ele-header :seller="seller"></ele-header>
     <!--包含3个路由v-link-->
     <div class="tab border-1px">
       <div class="tab-item">
@@ -23,9 +23,26 @@
   import header from './components/header/header'
 
   export default {
+    data () {
+      return {
+        seller: {}
+      }
+    },
+
     // 配置组件标签
     components: {
       'ele-header': header
+    },
+
+    created () {
+      this.$http.get('/api/seller')
+        .then((response) => {
+          const result = response.body
+          console.log(result)
+          if(result.code===0) {
+            this.seller = result.data
+          }
+        })
     }
   }
 </script>

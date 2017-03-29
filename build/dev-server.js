@@ -14,6 +14,34 @@ var port = process.env.PORT || config.dev.port
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+const apiData = require('../src/mock/data.json')
+const seller = apiData.seller
+const goods = apiData.goods
+const ratings = apiData.ratings
+const apiRouter = express.Router()  //router
+apiRouter.get('/seller', function (req, res) {
+  res.json({
+    code: 0,   //标识属性 0代表正确
+    data: seller
+  })
+})
+apiRouter.get('/goods', function (req, res) {
+  res.json({
+    code: 0,   //标识属性 0代表正确
+    data: goods
+  })
+})
+apiRouter.get('/ratings', function (req, res) {
+  res.json({
+    code: 0,   //标识属性 0代表正确
+    data: ratings
+  })
+})
+app.use('/api', apiRouter)
+
+
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
