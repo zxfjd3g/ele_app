@@ -1,4 +1,4 @@
-import Vue from 'vue'
+﻿import Vue from 'vue'
 import VueRouter from 'vue-router'
 import vueResource from 'vue-resource'
 
@@ -13,7 +13,7 @@ import './common/stylus/index.styl'
 Vue.use(VueRouter)
 Vue.use(vueResource)  //所有的组件对象都多了一个属性: $http
 
-// 创建router对象
+// 创建路由器对象
 let router = new VueRouter({
   linkActiveClass: 'active'
 })
