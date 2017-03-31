@@ -13,7 +13,8 @@
           <span class="icon special"></span>单人精彩套餐
         </span>
         </li>-->
-        <li class="menu-item" v-for="good in goods">
+        <li class="menu-item" v-for="good in goods" :class="{current: $index===currentIndex}"
+            @click="selectMenuItem($index, $event)">
           <span class="text border-1px">
             <span class="icon" :class="classMap[good.type]" v-if="good.type>=0"></span>{{good.name}}
           </span>
@@ -60,7 +61,9 @@
   export default{
     data () {
       return {
-        goods: []
+        goods: [],
+        scrollY: 0,
+        tops: []
       }
     },
 
@@ -76,6 +79,8 @@
             this.$nextTick(() => {
               //初始化scroll对象
               this._initScroll()
+              //初始化所有food标签项的top坐标
+              this._initTops()
             })
           }
         })
@@ -89,11 +94,50 @@
         })
         //创建foods的scroll
         this.foodsScroll = new BScroll(this.$els.foodsWrapper, {
-          click: true
+          click: true,
+          probeType: 3  //才能监视scroll
+        })
+
+        //监视foods的scroll
+        this.foodsScroll.on('scroll', (pos) => {
+          // console.log(pos.x, pos.y)
+          this.scrollY = Math.abs(pos.y)
+        })
+      },
+      _initTops () {
+
+        let top = 0
+        this.tops.push(top)
+        //找到所有food列表项标签
+        const foodListEles = this.$els.foodsWrapper.getElementsByClassName('food-list')
+        for (let i = 0, length=foodListEles.length; i < length; i++) {
+          top += foodListEles[i].clientHeight
+          this.tops.push(top)
+        }
+        console.log(this.tops)
+      },
+
+      selectMenuItem (index, event) {
+        console.log('selectMenuItem', event)
+        //只使用better-scroll为我们分发的事件, 过滤掉浏览器产生的事件
+        if(!event._constructed) {
+          return
+        }
+        const foodListEles = this.$els.foodsWrapper.getElementsByClassName('food-list')
+        this.foodsScroll.scrollToElement(foodListEles[index], 300)
+      }
+    },
+
+    computed: {
+      //计算当前的下标
+      currentIndex () {
+        const scrollY = this.scrollY
+        const tops = this.tops
+        //查找下标
+        return tops.findIndex((top, index) => {
+          return scrollY>=top && scrollY<tops[index+1]
         })
       }
-
-
     }
   }
 </script>
