@@ -65,7 +65,6 @@
   import cartcontrol from '../cartcontrol/cartcontrol'
   import split from '../split/split'
 
-
   export default{
     props: {
       food: Object
