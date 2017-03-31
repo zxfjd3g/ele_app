@@ -11,7 +11,7 @@
         <div class="price" :class="{highlight:totalCount>0}">￥{{totalPrice}}</div>
         <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
       </div>
-      <div class="content-right">
+      <div class="content-right" @click.stop="pay">
         <div class="pay" :class="payClass">
           {{payDesc}}
         </div>
@@ -68,6 +68,12 @@
         this.selectFoods.forEach(food => {
           food.count = 0
         })
+      },
+      pay() {
+        if(this.totalPrice<this.minPrice) {
+          return
+        }
+        alert(`支付${this.totalPrice}`)
       }
     },
 
@@ -108,6 +114,7 @@
 
         if(this.show) {
           if(!this.scroll) { //不存在
+            console.log('创建scroll');
             //创建scroll
             this.$nextTick(() => {
               this.scroll = new BScroll(this.$els.listContent, {
@@ -118,7 +125,6 @@
             //刷新scroll
             this.scroll.refresh()
           }
-
         }
 
         return this.show

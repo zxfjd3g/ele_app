@@ -26,7 +26,8 @@
         <li class="food-list food-list-hook" v-for="good in goods">
           <h1 class="title">{{good.name}}</h1>
           <ul>
-            <li class="food-item border-1px" v-for="food in good.foods">
+            <li class="food-item border-1px" v-for="food in good.foods"
+                @click="selectFoodItem(food, $event)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -54,13 +55,14 @@
               :min-price="seller.minPrice"
               :select-foods="selectFoods"></shopcart>
   </div>
-  <div>food组件</div>
+  <food :food="selectedFood" v-ref:food></food>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
   import cartcontrol from '../cartcontrol/cartcontrol'
   import shopcart from '../shopcart/shopcart'
+  import food from '../food/food'
 
   const OK = 0
   export default{
@@ -72,7 +74,8 @@
       return {
         goods: [],
         scrollY: 0,
-        tops: []
+        tops: [],
+        selectedFood: {}
       }
     },
 
@@ -134,6 +137,15 @@
         }
         const foodListEles = this.$els.foodsWrapper.getElementsByClassName('food-list')
         this.foodsScroll.scrollToElement(foodListEles[index], 300)
+      },
+
+      selectFoodItem (food, event) {
+        if(!event._constructed) {
+          return
+        }
+        this.selectedFood = food
+        //得到子组件对象, 调用其方法改变其状态
+        this.$refs.food.show()
       }
     },
 
@@ -163,7 +175,8 @@
 
     components: {
       cartcontrol,
-      shopcart
+      shopcart,
+      food
     }
   }
 </script>
