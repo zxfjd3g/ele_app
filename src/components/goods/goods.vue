@@ -42,7 +42,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  cartcontrol组件
+                  <cartcontrol :food="food"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -50,15 +50,24 @@
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice"
+              :min-price="seller.minPrice"
+              :select-foods="selectFoods"></shopcart>
   </div>
   <div>food组件</div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
+  import cartcontrol from '../cartcontrol/cartcontrol'
+  import shopcart from '../shopcart/shopcart'
 
   const OK = 0
   export default{
+    props: {
+      seller: Object
+    },
+
     data () {
       return {
         goods: [],
@@ -137,7 +146,24 @@
         return tops.findIndex((top, index) => {
           return scrollY>=top && scrollY<tops[index+1]
         })
+      },
+      //计算出count>0的food数组
+      selectFoods () {
+        const foods = []
+        this.goods.forEach(good => {
+          good.foods.forEach(food => {
+            if(food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
+    },
+
+    components: {
+      cartcontrol,
+      shopcart
     }
   }
 </script>
