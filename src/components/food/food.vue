@@ -42,7 +42,8 @@
                       :desc="desc"></ratingselect>
         <div class="rating-wrapper">
           <ul>
-            <li class="rating-item border-1px" v-for="rating in food.ratings">
+            <li class="rating-item border-1px" v-for="rating in food.ratings"
+                v-show="filterRating(rating.rateType, rating.text)">
               <div class="user">
                 <span class="name">{{rating.username}}</span>
                 <img class="avatar" width="12" height="12" :src="rating.avatar">
@@ -114,8 +115,36 @@
         }
         // this.food.count = 1
         Vue.set(this.food, 'count', 1)
-      }
+      },
 
+      filterRating (type, text) { //type: 0/1
+
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
+
+        const selectType = this.selectType //0/1/2
+        const onlyContent = this.onlyContent  //true/false
+
+        if(onlyContent&&!text) {
+          return false
+        }
+
+        if(selectType===ALL) {
+          return true
+        }
+
+        return type===selectType
+      }
+    },
+
+    events: {
+      'select.type': function (type) {
+        this.selectType = type
+      },
+      'only.content': function (onlyContent) {
+          this.onlyContent = onlyContent
+      }
     },
 
     components: {

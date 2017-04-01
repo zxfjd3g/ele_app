@@ -76,12 +76,16 @@
           return
         }
         this.selectType = type
+        //发送父组件food
+        this.$dispatch('select.type', type)
       },
       toggle (event) {
         if(!event._constructed) {
           return
         }
         this.onlyContent = !this.onlyContent
+        //发送父组件food
+        this.$dispatch('only.content', this.onlyContent)
       }
     }
   }
