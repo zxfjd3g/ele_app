@@ -17,6 +17,7 @@ Vue.use(vueResource)  //所有的组件对象都多了一个属性: $http
 let router = new VueRouter({
   linkActiveClass: 'active'
 })
+
 // 映射路由
 router.map({
   '/goods': {
@@ -29,6 +30,7 @@ router.map({
     component: seller
   }
 })
+
 // 启动路由
 router.start(App, '#app')
 

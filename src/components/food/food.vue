@@ -36,7 +36,10 @@
 
       <div class="rating">
         <h1 class="title">商品评价</h1>
-        <div>ratingselect组件</div>
+        <ratingselect :ratings="food.ratings"
+                      :select-type="selectType"
+                      :only-content="onlyContent"
+                      :desc="desc"></ratingselect>
         <div class="rating-wrapper">
           <ul>
             <li class="rating-item border-1px" v-for="rating in food.ratings">
@@ -64,6 +67,9 @@
   import Vue from 'vue'
   import cartcontrol from '../cartcontrol/cartcontrol'
   import split from '../split/split'
+  import ratingselect from '../ratingselect/ratingselect'
+
+  const ALL = 2
 
   export default{
     props: {
@@ -72,7 +78,14 @@
 
     data () {
       return {
-        isShow: false
+        isShow: false,
+        selectType: ALL,
+        onlyContent: true,
+        desc: {
+          all: '所有',
+          positive: '很好',
+          negative: '咻咻'
+        }
       }
     },
 
@@ -107,7 +120,8 @@
 
     components: {
       cartcontrol,
-      split
+      split,
+      ratingselect
     }
   }
 </script>
