@@ -15,7 +15,7 @@
       </div>
     </div>
     <!--各路由template页面容器-->
-    <router-view :seller="seller"></router-view>
+    <router-view :seller="seller" keep-alive></router-view>
   </div>
 </template>
 

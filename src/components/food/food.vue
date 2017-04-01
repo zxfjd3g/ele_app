@@ -48,7 +48,7 @@
                 <span class="name">{{rating.username}}</span>
                 <img class="avatar" width="12" height="12" :src="rating.avatar">
               </div>
-              <div class="time">{{rating.rateTime}}</div>
+              <div class="time">{{rating.rateTime | dateString}}</div>
               <p class="text">
                 <span :class="{'icon-thumb_down': rating.rateType===1, 'icon-thumb_up': rating.rateType===0 }"></span>{{rating.text}}
                 <!--<span :class="ratingType(rating.rateType)"></span>{{rating.text}}-->
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  import moment from 'moment'
   import BScroll from 'better-scroll'
   import Vue from 'vue'
   import cartcontrol from '../cartcontrol/cartcontrol'
@@ -144,6 +145,12 @@
       },
       'only.content': function (onlyContent) {
           this.onlyContent = onlyContent
+      }
+    },
+
+    filters: {
+      dateString(value) {
+        return moment(value).format('YYYY-MM-DD HH:mm')
       }
     },
 

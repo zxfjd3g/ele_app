@@ -52,7 +52,7 @@
                 <span class="item" v-for="item in rating.recommend">{{item}}</span>
               </div>
               <div class="time">
-                {{rating.rateTime}}
+                {{rating.rateTime | dateString}}
               </div>
             </div>
           </li>
@@ -65,6 +65,7 @@
 
 <script>
   import BScroll from 'better-scroll'
+  import moment from 'moment'
 
   import star from '../star/star'
   import split from '../split/split'
@@ -135,6 +136,12 @@
       },
       'only.content': function (onlyContent) {
         this.onlyContent = onlyContent
+      }
+    },
+
+    filters: {
+      dateString(value) {
+        return moment(value).format('YYYY-MM-DD HH:mm')
       }
     },
 
