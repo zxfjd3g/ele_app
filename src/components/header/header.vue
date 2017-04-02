@@ -30,7 +30,7 @@
     <div class="background">
       <img width="100%" height="100%" :src="seller.avatar">
     </div>
-    <div class="detail" v-show="detailShow">
+    <div class="detail" v-show="detailShow" transition="fade">
       <div class="detail-wrapper">
         <div class="detail-main clearfix">
           <div class="name">{{seller.name}}</div>
@@ -225,6 +225,7 @@
       transition: .5s
       backdrop-filter: blur(10px)
       &.fade-transition
+        transition: all .5s linear
         opacity:1
       &.fade-enter,&.fade-leave
         opacity:0

@@ -31,6 +31,8 @@
           } else {
             food.count++
           }
+          //发送添加的消息
+          this.$dispatch('cart.add', event.target)
         } else {
           if(food.count) {
             food.count--

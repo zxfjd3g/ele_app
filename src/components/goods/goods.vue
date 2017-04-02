@@ -53,7 +53,8 @@
     </div>
     <shopcart :delivery-price="seller.deliveryPrice"
               :min-price="seller.minPrice"
-              :select-foods="selectFoods"></shopcart>
+              :select-foods="selectFoods"
+              v-ref:shopcart></shopcart>
   </div>
   <food :food="selectedFood" v-ref:food></food>
 </template>
@@ -170,6 +171,15 @@
           })
         })
         return foods
+      }
+    },
+
+    events: {
+      'cart.add': function (el) {
+        //异步启动动画--->解决性能问题
+        this.$nextTick(() => {
+          this.$refs.shopcart.dropBall(el)
+        })
       }
     },
 

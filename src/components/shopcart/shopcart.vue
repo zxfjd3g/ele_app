@@ -17,7 +17,13 @@
         </div>
       </div>
     </div>
-    <div class="ball-container"></div>
+    <div class="ball-container">
+      <div class="ball" transition="drop" v-for="ball in balls" v-show="ball.show">
+        <div class="inner inner-hook"></div>
+      </div>
+
+    </div>
+
     <div class="shopcart-list" transition="fold" v-show="listShow">
       <div class="list-header">
         <h1 class="title">购物车</h1>
@@ -42,6 +48,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+
   import BScroll from 'better-scroll'
   import cartcontrol from '../cartcontrol/cartcontrol'
   export default{
@@ -53,7 +61,14 @@
 
     data () {
       return {
-        show: false
+        show: false,
+        balls: [
+          {show: false},
+          {show: false},
+          {show: false},
+          {show: false},
+          {show: false}
+        ]
       }
     },
 
@@ -74,6 +89,21 @@
           return
         }
         alert(`支付${this.totalPrice}`)
+      },
+
+      //尽量找到一个球执行动画
+      dropBall(el) {
+        //从balls中找出一个隐藏的ball, 将其显示
+        for (var i = 0; i < this.balls.length; i++) {
+          var ball = this.balls[i];
+          if(!ball.show) {
+            console.log('使用ball', i);
+            ball.show = true
+            ball.el = el
+            return
+          }
+        }
+        console.log('没有可用的ball了');
       }
     },
 
@@ -128,6 +158,67 @@
         }
 
         return this.show
+      }
+    },
+
+    transitions: {
+      drop: {
+        //指定动画开始的位置
+        beforeEnter (el) { //el当前要执行动画的球
+
+          //从balls中找出最右边为true的ball
+          let count = this.balls.length
+          while(count--) {
+            let ball = this.balls[count]
+            if(ball.show) {
+              ball.ballEl = el
+
+              let rect = ball.el.getBoundingClientRect()
+              const x = rect.left-32
+              const y = -(window.innerHeight-rect.top-22)
+              el.style.webkitTransform = `translate3d(0,${y}px,0)`
+              el.style.transform = `translate3d(0,${y}px,0)`
+              const innerEl = el.getElementsByClassName('inner-hook')[0]
+              innerEl.style.webkitTransform = `translate3d(${x}px,0,0)`
+              innerEl.style.transform = `translate3d(${x}px,0,0)`
+              break
+            }
+          }
+        },
+        //指定动画结束的位置
+        enter (el) {
+          //导致重排重绘
+          let rf = el.offsetHeight
+
+
+
+          this.$nextTick(() => {
+            el.style.webkitTransform = `translate3d(0,0,0)`
+            el.style.transform = `translate3d(0,0,0)`
+            const innerEl = el.getElementsByClassName('inner-hook')[0]
+            innerEl.style.webkitTransform = `translate3d(0,0,0)`
+            innerEl.style.transform = `translate3d(0,0,0)`
+          })
+
+        },
+        //做一些收尾的工作
+        afterEnter (el) { //动画结束
+          console.log('afterEnter');
+          //从balls中找出最左边show为true的ball, 将其改为false
+          for (var i = 0; i < this.balls.length; i++) {
+            var ball = this.balls[i];
+            if(ball.show) {
+              console.log('-------', i);
+              ball.show = false
+              ball.el = null
+              // 手动隐藏
+              ball.ballEl.style.display = 'none'
+
+              // 有时动画结束后并不会调用afterEnter()
+              break
+            }
+          }
+        }
       }
     },
 
